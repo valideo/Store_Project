@@ -1,0 +1,52 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="row" style="margin-top: 100px">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+    <table class="table table-bordered">
+    <thead>
+    <tr>
+<th>#</th>
+<th>Title</th>
+<th>Type</th>
+<th>Content</th>
+<th>Price</th>
+<th>Image</th>
+<th>Supprimer</th>
+    </tr>
+    </thead>
+    <tbody>
+		{% for produit in produits %}
+		<tr>
+			<th>{{produit.id}}</th>
+			<th>{{produit.title}}</th>
+			<th>{{produit.type}}</th>
+			<th>{{produit.content}}</th>
+			<th>{{produit.price}} €</th>
+			<th><img src="{{produit.img}}" style="width: 100px"></th>
+			<th><a href="{{ path('admin_delete_produit', {'id': produit.id }) }}">Supprimer</a></th>
+		</tr>
+		{% endfor %}
+		<tr>
+		<form action="{{ path('admin_create_produit') }}" method="GET">
+			<th>ID</th>
+			<th><input type="text" name="title"></th>
+			<th>
+				  <select name="type">
+					  <option value="DSLR">DSLR</option>
+					  <option value="Lense">Lense</option>
+				   </select>
+			</th>
+			<th><input type="text" name="content"></th>
+			<th><input type="text" name="price"></th>
+			<th><input type="text" name="img"></th>
+			<th><input type="submit" value="Ajouter"/></th>
+		</form>
+		</tr>
+	</tbody>
+ 	</table>
+ 	<a href=""><h3>Voir la liste des commandes</h3></a>
+ 	</div>
+	</div>
+
+{% endblock %}

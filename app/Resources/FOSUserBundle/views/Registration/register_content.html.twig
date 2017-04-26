@@ -1,0 +1,17 @@
+{% trans_default_domain 'FOSUserBundle' %}
+<div class="row text-center" style="margin-top: 100px">
+<div class="col-md-2"></div>
+<div class="col-md-3">
+<h3>Vous avez déjà un compte ?</h3>
+<a href="{{ path('fos_user_security_login') }}"><h4>Se connecter</h4></a>
+</div>
+<div class="col-md-2"></div>
+<div class="col-md-3">
+{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register subscribe'}}) }}
+    {{ form_widget(form) }}
+    <div>
+        <input class="btn btn-default" type="submit" value="{{ 'registration.submit'|trans }}" />
+    </div>
+{{ form_end(form) }}
+</div>
+</div>

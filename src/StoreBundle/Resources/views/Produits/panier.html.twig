@@ -1,0 +1,52 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+{% set total = 0 %}
+    <div class="row" style="margin-top: 100px; width : 95%; margin-left: 2.5%">
+    <h2>Votre panier</h2>
+<table class="table table-bordered">
+		<thead>
+    <tr>
+<th>Référence</th>
+<th>Type</th>
+<th>Quantité</th>
+<th>Prix</th>
+<th>Supprimer</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if produits|length == 0 %}
+    <tr>
+    <td>Aucun article dans votre panier</td>
+    </tr>
+    {% endif %}
+
+
+    {% for produit in produits %}
+		<tr>
+			<th>{{produit.title}}</th>
+			<th>{{produit.type}}</th>
+			<form action="{{ path('ajouter', {'id' : produit.id})}}" method="get">
+			<th>
+			<select name="qte" onChange="this.form.submit()">
+			{% for i in 1..10 %}
+				<option value="{{i}}" {% if i == panier[produit.id] %} selected="selected" {% endif %}>{{i}}</option>
+				{% endfor %}
+			</select>
+			</th>
+			</form>
+			<th>{{produit.price * panier[produit.id]}} €</th>
+			<th><a href="{{ path('supprimer', {'id' : produit.id})}}">Supprimer</a></th>
+		</tr>
+		{% set total = total + (produit.price * panier[produit.id]) %}
+		{% endfor %}
+
+ </tbody>
+ </table>
+ <a href="{{url('produits')}}" class="btn btn-primary text-center" role="button">Retour aux achats</a>
+ <div class="text-right">
+ <h4 >Total : {{total}} €</h4>
+ <a href="{{url('validation')}}" class="btn btn-primary" role="button">Valider le panier</a>
+ </div>
+	</div>
+
+{% endblock %}

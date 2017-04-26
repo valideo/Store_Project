@@ -1,0 +1,22 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="row" style="margin-top: 100px; width : 95%; margin-left: 2.5%">
+
+		{% for produit in produits %}
+		<a href="{{ path('detail_produit', {'id': produit.id }) }}">
+		<div class="col-sm-6 col-md-4">
+		    <div class="thumbnail">
+		      <img class="img_product" src="{{produit.img}}" alt="...">
+		      <div class="caption">
+		        <h3>{{produit.title}}</h3>
+		        <p>{{produit.content}}</p>
+		        <p><a href="{{path('ajouter', {'id' : produit.id })}}" class="btn btn-primary" role="button">Ajouter au panier</a> {{produit.price}} €</p>
+		      </div>
+		    </div>
+		</div>
+		</a>
+		{% endfor %}
+ 
+	</div>
+
+{% endblock %}
