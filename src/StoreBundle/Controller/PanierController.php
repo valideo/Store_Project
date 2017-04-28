@@ -6,6 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use StoreBundle\Entity\Produit;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use StoreBundle\Entity\Commandes;
+use UtilisateursBundle\Entity\Utilisateurs;
 
 class PanierController extends Controller
 {
@@ -59,7 +63,7 @@ class PanierController extends Controller
     */
     public function supprimerPanier($id, Request $request)
     {
-        $session = $session = $request->getSession();
+        $session = $request->getSession();
         $panier = $session->get('panier');
         
         if (array_key_exists($id, $panier))
@@ -78,6 +82,53 @@ class PanierController extends Controller
     {
         
         return $this->render('StoreBundle:Produits:validation.html.twig');
+    }
+
+
+    /**
+     * @Route("/checkConnected/{userID}-{pricetot}-{list_produits}", name="checkConnected")
+    */
+     public function checkConnected(Request $request, $userID, $pricetot, $list_produits)
+    {   
+        $session = $request->getSession();
+        $panier = $session->get('panier');
+        $securityContext = $this->container->get('security.authorization_checker');
+
+    if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+
+        savePanier(1, 1, 1, [1,2]);
+
+        unset($panier);
+        $panier = array();
+        $session->set('panier',$panier);
+        return $this->render('StoreBundle:Produits:validation.html.twig');
+        
+    }else{
+
+    }
+        return $this->redirectToRoute('fos_user_security_login'); 
+    }
+
+    public function savePanier($userID, $pricetot, $dateTime, $list_produits )
+    {
+
+        $user = $userID;
+        $price = $pricetot;
+        $date = $dateTime;
+        $produits = $list_produits;
+
+        $commande = new Commandes();
+
+        $commande->setProduits($produits);
+        $commande->setPrice($price);
+        $commande->setDate($date);
+        $commande->setUserID($user);
+
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($commande);
+        $em->flush();
+
     }
 
 }

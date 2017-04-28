@@ -2,7 +2,7 @@
 {% block body %}
 {% set total = 0 %}
     <div class="row" style="margin-top: 100px; width : 95%; margin-left: 2.5%">
-    <h2>Votre panier</h2>
+    <h2>Votre panier {{ app.user.username }}<p></h2>
 <table class="table table-bordered">
 		<thead>
     <tr>
@@ -20,8 +20,10 @@
     </tr>
     {% endif %}
 
-
+	{% set i = 0 %}
     {% for produit in produits %}
+    {% list_produits[i] = produit.id %}
+
 		<tr>
 			<th>{{produit.title}}</th>
 			<th>{{produit.type}}</th>
@@ -38,6 +40,7 @@
 			<th><a href="{{ path('supprimer', {'id' : produit.id})}}">Supprimer</a></th>
 		</tr>
 		{% set total = total + (produit.price * panier[produit.id]) %}
+		{% i=i+1 %}
 		{% endfor %}
 
  </tbody>
@@ -45,7 +48,7 @@
  <a href="{{url('produits')}}" class="btn btn-primary text-center" role="button">Retour aux achats</a>
  <div class="text-right">
  <h4 >Total : {{total}} €</h4>
- <a href="{{url('validation')}}" class="btn btn-primary" role="button">Valider le panier</a>
+ <a href="{{ path('checkConnected', {user_ID : 'app.user.id', pricetot : 'total', dateTime : '', list_produits : 'list_produits'})}}" class="btn btn-primary" role="button">Valider le panier</a>
  </div>
 	</div>
 
