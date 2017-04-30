@@ -19,11 +19,10 @@
     <td>Aucun article dans votre panier</td>
     </tr>
     {% endif %}
-
-	{% set i = 0 %}
+    {% set i = 0 %}
+    {% set list_produits = [] %}
     {% for produit in produits %}
-    {% list_produits[i] = produit.id %}
-
+    {% set list_produits = list_produits|merge({ i: 'produit.id' }) %}
 		<tr>
 			<th>{{produit.title}}</th>
 			<th>{{produit.type}}</th>
@@ -39,8 +38,8 @@
 			<th>{{produit.price * panier[produit.id]}} €</th>
 			<th><a href="{{ path('supprimer', {'id' : produit.id})}}">Supprimer</a></th>
 		</tr>
+		{% set i = i+1 %}
 		{% set total = total + (produit.price * panier[produit.id]) %}
-		{% i=i+1 %}
 		{% endfor %}
 
  </tbody>
@@ -48,7 +47,8 @@
  <a href="{{url('produits')}}" class="btn btn-primary text-center" role="button">Retour aux achats</a>
  <div class="text-right">
  <h4 >Total : {{total}} €</h4>
- <a href="{{ path('checkConnected', {user_ID : 'app.user.id', pricetot : 'total', dateTime : '', list_produits : 'list_produits'})}}" class="btn btn-primary" role="button">Valider le panier</a>
+ <a href="{{ path('checkConnected', {'userID' : app.user.id, 'pricetot' : total, 'dateTime' : 1, 'list_produits' :
+ list_produits})}}" class="btn btn-primary" role="button">Valider le panier</a>
  </div>
 	</div>
 
